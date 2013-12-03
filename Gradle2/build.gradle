@@ -1,5 +1,5 @@
 apply plugin: 'java'
-apply plugin: 'code-quality'
+apply plugin: 'eclipse'
 
 repositories {
     mavenCentral()
@@ -21,36 +21,10 @@ dependencies {
     findbugs 'com.google.code.findbugs:findbugs:1.3.9'
 }
 
-task pmd << {
-    println 'Running PMD static code analysis'
-    ant {
-        taskdef(name: 'pmd', classname: 'net.sourceforge.pmd.ant.PMDTask',
-                classpath: configurations.pmd.asPath)
-
-        taskdef(name: 'cpd', classname: 'net.sourceforge.pmd.cpd.CPDTask',
-                classpath: configurations.pmd.asPath)
-
-        pmd(shortFilenames: 'true', failonruleviolation: 'false',
-                rulesetfiles: 'conf/pmd-rules.xml') {
-            formatter(type: 'xml', toFile: 'build/pmd.xml')
-            fileset(dir: "src/main/java") {
-                include(name: '**/*.java')
-            }
-            fileset(dir: "src/test/java") {
-                include(name: '**/*.java')
-            }
-        }
-
-        cpd(minimumTokenCount: '50', format: 'xml',
-                ignoreIdentifiers: 'true',
-                outputFile: 'build/cpd.xml') {
-            fileset(dir: "src/main/java") {
-                include(name: '**/*.java')
-            }
-            fileset(dir: "src/test/java") {
-                include(name: '**/*.java')
-            }
-        }
-    }
-}
-
+sourceSets {
+	main {
+	  java {
+		srcDir 'src'
+	  }
+	}
+  }
